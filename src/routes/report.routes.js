@@ -2,7 +2,7 @@
 import { Router } from "express";
 import Booking from "../models/Booking.js";
 import Flight from "../models/Flight.js";
-import { auth } from "../middleware/auth.js"; // ✅ import auth middleware
+import { auth } from "../middleware/auth.js"; //  import auth middleware
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.get("/summary", auth, async (req, res) => {
   try {
     const userId = req.user._id;
 
-    // ✅ Fetch only this user's bookings
+    //  Fetch only this user's bookings
     const userBookings = await Booking.find({ user: userId }).populate("flight");
 
     const totalBookings = userBookings.length;
@@ -23,7 +23,7 @@ router.get("/summary", auth, async (req, res) => {
     const cancelled = userBookings.filter((b) => b.status === "CANCELLED").length;
     const cancelRate = totalBookings ? (cancelled / totalBookings) * 100 : 0;
 
-    // ✅ Monthly Trend
+    //  Monthly Trend
     const monthlyTrend = await Booking.aggregate([
       { $match: { user: userId } },
       {
@@ -44,7 +44,7 @@ router.get("/summary", auth, async (req, res) => {
       count: m.count,
     }));
 
-    // ✅ Top Routes for this user
+    //  Top Routes for this user
     const popularRoutes = await Booking.aggregate([
       { $match: { user: userId } },
       {
@@ -69,7 +69,7 @@ router.get("/summary", auth, async (req, res) => {
       { $limit: 5 },
     ]);
 
-    // ✅ Class Distribution for this user
+    //  Class Distribution for this user
     const classDistribution = await Booking.aggregate([
       { $match: { user: userId } },
       {
@@ -95,7 +95,7 @@ router.get("/summary", auth, async (req, res) => {
       classDistribution,
     });
   } catch (err) {
-    console.error("❌ Report generation error:", err);
+    console.error(" Report generation error:", err);
     res.status(500).json({ message: "Failed to generate report" });
   }
 });

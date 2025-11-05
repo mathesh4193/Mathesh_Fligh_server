@@ -1,11 +1,6 @@
-// services/pdf.service.js
 import PDFDocument from "pdfkit";
 import QRCode from "qrcode";
 
-/**
- * Generate a professional, single-page Flight E-Ticket PDF (supports up to 9 passengers)
- * with equal-sized seat allocation boxes.
- */
 export const generateBookingPdf = async (booking) => {
   const doc = new PDFDocument({
     margin: 40,
@@ -15,10 +10,8 @@ export const generateBookingPdf = async (booking) => {
   const flight = booking.flight || {};
   const passengers = booking.passengers || [];
 
-  // 🎫 Ticket Number
   const ticketNumber = "TKT-" + booking._id.toString().slice(-6).toUpperCase();
 
-  // ✈️ QR CODE DATA
   const qrData = `Booking Ref: ${booking.bookingReference}
 Passengers: ${passengers.map((p) => p.name).join(", ")}
 Flight: ${flight.flightNumber}
@@ -28,7 +21,6 @@ Arrival: ${flight.arrivalTime}`;
   const qrImage = await QRCode.toDataURL(qrData);
   const qrBuffer = Buffer.from(qrImage.split(",")[1], "base64");
 
-  /* ===================== HEADER ===================== */
   doc.rect(0, 0, doc.page.width, 70).fill("#003366");
   doc.fillColor("white").font("Helvetica-Bold").fontSize(22).text("Flight E-Ticket", 50, 25);
   doc.font("Helvetica").fontSize(11);
@@ -36,7 +28,6 @@ Arrival: ${flight.arrivalTime}`;
   doc.text(`Ticket No: ${ticketNumber}`, 400, 45, { align: "right" });
   doc.fillColor("#000");
 
-  /* ===================== CONFIRMATION MESSAGE ===================== */
   doc.moveDown(2);
   doc.font("Helvetica").fontSize(12);
   doc.text(`Dear Passenger,`, 50, 90);
@@ -45,7 +36,6 @@ Arrival: ${flight.arrivalTime}`;
   doc.text(`Flight No: ${flight.flightNumber || "N/A"}`, 50);
   doc.moveDown(1);
 
-  /* ===================== FLIGHT SUMMARY ===================== */
   const summaryY = doc.y + 5;
   doc.roundedRect(50, summaryY, 500, 90, 10).fill("#f4f7ff").stroke("#b0c4de");
 
@@ -63,7 +53,6 @@ Arrival: ${flight.arrivalTime}`;
   // QR Code
   doc.image(qrBuffer, 470, summaryY + 10, { width: 60, height: 60 });
 
-  /* ===================== PASSENGER DETAILS ===================== */
   const passengerStartY = summaryY + 120;
   doc.fillColor("#003366").font("Helvetica-Bold").fontSize(14).text("Passenger Details", 50, passengerStartY);
   const tableY = passengerStartY + 20;
@@ -84,7 +73,7 @@ Arrival: ${flight.arrivalTime}`;
   passengers.forEach((p, idx) => {
     const seatCode = p.seat && p.seat !== "Auto-Assigned"
       ? p.seat
-      : `${seatRows[Math.floor(idx / 3)]}${(idx % 3) + 1}`; // Auto seat allocation (A1–C3)
+      : `${seatRows[Math.floor(idx / 3)]}${(idx % 3) + 1}`; 
 
     doc.rect(50, rowY - 3, 500, rowHeight).stroke("#b0c4de");
     const vals = [
@@ -101,7 +90,6 @@ Arrival: ${flight.arrivalTime}`;
     rowY += rowHeight;
   });
 
-  /* ===================== SEAT LAYOUT (Equal Boxes) ===================== */
   const seatY = rowY + 20;
   doc.fillColor("#003366").font("Helvetica-Bold").fontSize(14).text("Seat Layout", 50, seatY);
   const layoutY = seatY + 25;
@@ -124,7 +112,6 @@ Arrival: ${flight.arrivalTime}`;
     doc.font("Helvetica-Bold").fontSize(10).fillColor("#003366").text(s.seat, x + 17, y + 7);
   });
 
-  /* ===================== FARE DETAILS ===================== */
   const fareY = layoutY + 70;
   doc.fillColor("#003366").font("Helvetica-Bold").fontSize(14).text("Fare Details", 50, fareY);
   const fareBoxY = fareY + 20;
@@ -147,7 +134,6 @@ Arrival: ${flight.arrivalTime}`;
     yPos += 20;
   });
 
-  /* ===================== FOOTER ===================== */
   const footerY = doc.page.height - 90;
   doc.rect(0, footerY, doc.page.width, 70).fill("#003366");
   doc.fillColor("white").font("Helvetica-Bold").fontSize(12).text("Thank you for choosing Mathesh Airlines!", 0, footerY + 15, {

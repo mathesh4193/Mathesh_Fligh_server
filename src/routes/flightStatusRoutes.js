@@ -1,4 +1,3 @@
-// routes/flightStatusRoutes.js
 import { Router } from "express";
 import { getFlightStatus } from "../services/flightStatus.service.js";
 

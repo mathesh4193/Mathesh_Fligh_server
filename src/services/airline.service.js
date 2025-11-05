@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Example: aviationstack (adjust params to your provider)
 const api = axios.create({
   baseURL: process.env.AIRLINE_API_BASE
 });

@@ -3,18 +3,16 @@ import Flight from "../models/Flight.js";
 
 const router = Router();
 
-// ✅ Get all flights
 router.get("/", async (_req, res) => {
   try {
     const flights = await Flight.find();
-    res.json(flights); // ✅ Send array directly (frontend expects array)
+    res.json(flights); 
   } catch (err) {
     console.error("Error fetching flights:", err.message);
     res.status(500).json({ message: "Error fetching flights" });
   }
 });
 
-// ✅ Get origins and destinations
 router.get("/origins-destinations", async (_req, res) => {
   try {
     const flights = await Flight.find().select("origin destination -_id");
@@ -29,7 +27,6 @@ router.get("/origins-destinations", async (_req, res) => {
   }
 });
 
-// ✅ Search flights by origin, destination & date
 router.get("/search", async (req, res) => {
   try {
     const { origin, destination, date } = req.query;
@@ -55,7 +52,7 @@ router.get("/search", async (req, res) => {
         .json({ message: `No flights found from ${origin} to ${destination}` });
     }
 
-    res.json(flights); // ✅ Send array directly
+    res.json(flights); 
   } catch (err) {
     console.error("Error searching flights:", err.message);
     res.status(500).json({ message: "Error searching flights" });

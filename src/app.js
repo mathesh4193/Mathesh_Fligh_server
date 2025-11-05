@@ -47,7 +47,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/flight-status", flightStatusRoutes);
 
 app.get("/", (req, res) => {
-  res.send("🚀 Flight Booking API is running...");
+  res.send("Flight Booking API is running...");
 });
 
 app.use((req, res) => {
@@ -55,7 +55,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error("🔥 Server Error:", err.stack);
+  console.error("Server Error:", err.stack);
   res.status(500).json({ message: "Internal Server Error" });
 });
 

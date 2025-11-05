@@ -4,14 +4,9 @@ import User from "../models/User.js";
 
 const router = Router();
 
-// 🔐 Generate JWT Token
 const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-/**
- * @route   POST /api/auth/register
- * @desc    Register a new user
- * @access  Public
- */
+
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password, phone, dateOfBirth, preferences } = req.body;
@@ -37,11 +32,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/**
- * @route   POST /api/auth/login
- * @desc    Authenticate user and get token
- * @access  Public
- */
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,11 +48,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/auth/me
- * @desc    Get user profile using JWT
- * @access  Private
- */
+
 router.get("/me", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;

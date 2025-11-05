@@ -4,7 +4,6 @@ import Booking from "../models/Booking.js";
 
 const router = express.Router();
 
-// ✅ Create checkout
 router.post("/checkout", async (req, res) => {
   try {
     const { bookingId, successUrl, cancelUrl } = req.body;
@@ -18,7 +17,6 @@ router.post("/checkout", async (req, res) => {
   }
 });
 
-// ✅ Manual verify route
 router.get("/verify/:bookingId", verifyPaymentStatus);
 
 export default router;

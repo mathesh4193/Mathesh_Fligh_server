@@ -1,11 +1,9 @@
-// src/services/notification.service.js
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import twilio from "twilio";
 
 dotenv.config();
 
-/* ✅ 1. Setup Nodemailer transporter */
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -14,7 +12,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/* ✅ 2. Send booking confirmation email */
 export const sendBookingEmail = async (toEmail, booking) => {
   try {
     const flight = booking.flight || {};
@@ -69,24 +66,23 @@ export const sendBookingEmail = async (toEmail, booking) => {
       html: htmlContent,
     });
 
-    console.log("✅ Email sent successfully to:", toEmail);
+    console.log(" Email sent successfully to:", toEmail);
   } catch (err) {
-    console.error("❌ Failed to send email:", err.message);
+    console.error(" Failed to send email:", err.message);
   }
 };
 
-/* ✅ 3. Send SMS notification via Twilio */
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 export const sendSMS = async (toPhone, message) => {
   try {
     await client.messages.create({
       body: message,
-      from: process.env.TWILIO_PHONE, // Your Twilio phone number
+      from: process.env.TWILIO_PHONE, 
       to: toPhone,
     });
-    console.log("✅ SMS sent successfully to:", toPhone);
+    console.log(" SMS sent successfully to:", toPhone);
   } catch (err) {
-    console.error("❌ Failed to send SMS:", err.message);
+    console.error(" Failed to send SMS:", err.message);
   }
 };
