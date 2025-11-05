@@ -27,6 +27,7 @@ app.use(
     origin: process.env.CORS_ORIGIN?.split(",") || [
       "http://localhost:3000",
       "http://localhost:3001",
+      "https://matheshflight.netlify.app"
     ],
     credentials: true,
   })
